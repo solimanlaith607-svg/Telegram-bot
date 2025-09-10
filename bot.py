@@ -1,37 +1,27 @@
 import os
-import logging
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Application, CommandHandler
 
-# إعداد اللوجز
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+# جلب التوكن من Environment Variables
+TOKEN = os.getenv("BOT_TOKEN")
 
-# أوامر البوت
-def start(update, context):
-    update.message.reply_text("أهلا! البوت شغال ✅")
+# تعريف أوامر بسيطة
+async def start(update, context):
+    await update.message.reply_text("أهلا! البوت شغال ✅")
 
-def echo(update, context):
-    update.message.reply_text(update.message.text)
+async def help_command(update, context):
+    await update.message.reply_text("الأوامر المتاحة:\n/start - بدء البوت\n/help - المساعدة")
 
 def main():
-    # جلب التوكن من Environment Variables
-    TOKEN = os.getenv("TOKEN")
+    # إنشاء التطبيق
+    application = Application.builder().token(TOKEN).build()
 
-    if not TOKEN:
-        logger.error("⚠️ ما لقيت التوكن! لازم تضيف Environment Variable اسمو TOKEN في Render")
-        return
+    # إضافة الأوامر
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("help", help_command))
 
-    updater = Updater(TOKEN, use_context=True)
-    dp = updater.dispatcher
-
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
-
-    updater.start_polling()
-    updater.idle()
+    # تشغيل البوت
+    application.run_polling()
 
 if __name__ == "__main__":
     main()
+
