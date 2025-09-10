@@ -1,27 +1,16 @@
 import os
-from telegram.ext import Application, CommandHandler
+from telegram.ext import Application, CommandHandler, ContextTypes
+from telegram import Update
 
-# جلب التوكن من Environment Variables
-TOKEN = os.getenv("BOT_TOKEN")
+# قراءة التوكن من Environment
+TOKEN = os.getenv("TOKEN")
 
-# تعريف أوامر بسيطة
-async def start(update, context):
-    await update.message.reply_text("أهلا! البوت شغال ✅")
+application = Application.builder().token(TOKEN).build()
 
-async def help_command(update, context):
-    await update.message.reply_text("الأوامر المتاحة:\n/start - بدء البوت\n/help - المساعدة")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Bot is running ✅")
 
-def main():
-    # إنشاء التطبيق
-    application = Application.builder().token(TOKEN).build()
-
-    # إضافة الأوامر
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("help", help_command))
-
-    # تشغيل البوت
-    application.run_polling()
+application.add_handler(CommandHandler("start", start))
 
 if __name__ == "__main__":
-    main()
-
+    application.run_polling
