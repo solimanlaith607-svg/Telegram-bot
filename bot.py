@@ -12,7 +12,7 @@ def echo(update, context):
     update.message.reply_text(update.message.text)
 
 def main():
-    TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"  # ⚠️ بدّل هالجملة بالتوكن تبعك من BotFather
+    TOKEN = '8223338009:AAEq7NoAattxNKtxRxn0gbR7AS5Ub358meQ'
     updater = Updater(TOKEN, use_context=True)
 
     dp = updater.dispatcher
