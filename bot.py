@@ -1,15 +1,18 @@
-from telegram.ext import Application, CommandHandler, ContextTypes
-from telegram import Update
+import telebot
 
-# حط التوكن مباشر هون للتجربة
+# التوكن تبعك
 TOKEN = "8223338009:AAEq7NoAattxNKtxRxn0gbR7AS5Ub358meQ"
+bot = telebot.TeleBot(TOKEN)
 
-application = Application.builder().token(TOKEN).build()
+# رسالة الترحيب
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "اهلا بك في بوت Ichanci Lith 👋")
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Bot is running ✅")
+# رد على أي رسالة
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    bot.reply_to(message, f"انت كتبت: {message.text}")
 
-application.add_handler(CommandHandler("start", start))
-
-if __name__ == "__main__":
-    application.run_polling()
+# تشغيل البوت
+bot.polling()
